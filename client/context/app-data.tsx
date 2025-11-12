@@ -138,12 +138,15 @@ function uid(prefix: string) {
 }
 
 async function fetchWithAuth(url: string, opts: RequestInit = {}) {
+  const apiUrl = import.meta.env.VITE_PUBLIC_API_URL || "http://localhost:4000";
+  const fullUrl = url.startsWith("http") ? url : `${apiUrl}${url}`;
+  
   const headers = {
     "Content-Type": "application/json",
     ...(opts.headers || {})
   };
 
-  const res = await fetch(url, {
+  const res = await fetch(fullUrl, {
     ...opts,
     headers,
     body: opts.body && typeof opts.body !== "string" ? JSON.stringify(opts.body) : opts.body
