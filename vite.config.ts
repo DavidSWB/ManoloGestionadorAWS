@@ -18,12 +18,6 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: "dist/spa",
-    commonjsOptions: {
-      include: [/mongodb/]
-    },
-    rollupOptions: {
-      external: ['mongodb']
-    }
   },
   plugins: [react(), expressPlugin()],
   resolve: {
