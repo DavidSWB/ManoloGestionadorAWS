@@ -15,7 +15,21 @@ dotenv.config();
 
 function setupApp() {
   const app = express();
-  app.use(cors());
+  // CORS configuration: allow origins from env or allow all by default
+  const allowed = process.env.CORS_ALLOWED_ORIGINS
+    ? process.env.CORS_ALLOWED_ORIGINS.split(",").map((s) => s.trim())
+    : true; // true => allow all origins
+
+  const corsOptions = {
+    origin: allowed,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false,
+  };
+
+  app.use(cors(corsOptions));
+  // Ensure preflight requests are handled for all routes
+  app.options("*", cors(corsOptions));
   app.use(express.json());
 
   app.use("/api/auth", authRouter);
